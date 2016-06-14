@@ -1,0 +1,76 @@
+{% extends 'Inventory/base.html' %}
+{% block site_active %}active{% endblock %}
+{% block body %}
+<div class="site-container container-fluid">
+
+
+    <!-- Sites -->
+    <div class="row">
+
+        <div class="col-sm-12">
+            <h3>Sites</h3>
+        </div>
+
+
+        {% if sites %}
+            {% for site in sites %}
+                {% if site.is_closed == False %}
+                    <div class="col-sm=4 col-lg-2">
+                        <div class="thumbnail">
+                            <a href="{% url 'Inventory:detail' site.id %}">
+                                <li>no map avaialbe</li>
+                            </a>
+                            <div class="caption">
+                                <h2>{{ site.city }}</h2>
+                                <h4>{{ site.siteCode }}</h4>
+
+                                <!-- View Site Detail -->
+                                <a href="{% url 'Inventory:detail' site.id %}" class="btn btn-primary btn-sn" role="button">View Details</a>
+
+                                <!-- Close Site -->
+                                <a href="{% url 'Inventory:closed' site.id %}" class="btn btn-default btn-sm" role="button">
+                                    <span class="glyphicon glyphicon-ban-circle {% if site.is_closed %}active{% endif %}"></span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <div class="col-sm-12">
+            <h3> Closed Sites</h3>
+        </div>
+        {% if sites %}
+            {% for site in sites %}
+                {% if site.is_closed == True %}
+                    <div class="col-sm=4 col-lg-2">
+                        <div class="thumbnail">
+                            <a href="{% url 'Inventory:detail' site.id %}">
+                                <li>no map avaialbe</li>
+                            </a>
+                            <div class="caption">
+                                <h2>{{ site.city }}</h2>
+                                <h4>{{ site.siteCode }}</h4>
+
+                                <!-- View Site Detail -->
+                                <a href="{% url 'Inventory:detail' site.id %}" class="btn btn-primary btn-sn" role="button">View Details</a>
+                                    </button>
+                                <!-- closed site -->
+                                <a href="{% url 'Inventory:closed' site.id %}" class="btn btn-default btn-sm" role="button">
+                                    <span class="glyphicon glyphicon-off {% if site.is_closed %}active{% endif %}"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+
+
+</div>
+
+{% endblock %}

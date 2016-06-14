@@ -1,0 +1,14 @@
+body{
+    background: white;
+}
+
+.navbar{
+    border-radius: 0;
+}
+
+.navbar-brand{
+    font-family: 'Audiowide', cursive;
+}
+
+.navbar-header {
+}

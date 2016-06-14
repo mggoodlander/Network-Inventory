@@ -1,0 +1,114 @@
+{% extends 'Inventory/base.html' %}
+{% block title%}Site Details{% endblock %}
+{% block site_active %}active{% endblock %}
+{% block body %}
+<div class="container-fluid detail-container">
+
+    <div class="row">
+
+        <!-- Left Site Info -->
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{% url 'Inventory:detail' site.id %}">
+                        <h3> No Map Available </h3>
+                    </a>
+                <h1>{{ site.city }}, {{ site.state }} <br><small>{{ site.siteCode }}</small></h1>
+                <h2>{{ site.address }} {{ site.zipcode }}</h2>
+
+                <!-- Update Site -->
+                <a href="{% url 'Inventory:site-update' site.id %}" class="btn btn-primary btn-sn" role="button">Update Site</a>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Right Detail Info -->
+        <div class="col-sm-8 col-md-9">
+            <div class="row">
+                <div class="col-sm-6 col-md-7">
+                    <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                    {% if site.config_set.all %}
+                        <li role="presentation"><a href="{% url 'Inventory:detail-update' site.id %}">Update Details</a> </li>
+                    {% else %}
+                        <li role="presentation"><a href="{% url 'Inventory:detail-create' site.id %}">Add Details</a> </li>
+                    {% endif %}
+                    <li role="presentation"><a href="#">Delete Details</a> </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3>Details</h3>
+
+                    {% if error_message %}
+                    <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+                    {% for detail in site.config_set.all %}
+                        <li>provider: {{ detail.provider}}</li>
+                        <li>circuit_id: {{ detail.circuit_id}}</li>
+                        <li>svc_id: {{ detail.svc_id}}</li>
+                        <li>prefix: {{ detail.prefix}}</li>
+                        <li>wan_net: {{ detail.wan_net}}</li>
+                        <li>wan_remote: {{ detail.wan_remote}}</li>
+                        <li>wan_local: {{ detail.wan_local}}</li>
+                        <li>name_fw: {{ detail.name_fw}}</li>
+                        <li>fw_type: {{ detail.fw_type}}</li>
+                        <li>name_sw: {{ detail.name_sw}}</li>
+                        <li>sw_type: {{ detail.sw_type}}</li>
+                        <li>fw_lan: {{ detail.fw_lan}}</li>
+                        <li>sw_lan: {{ detail.sw_lan}}</li>
+                        <li>fw_lo: {{ detail.fw_lo}}</li>
+                        <li>sw_lo: {{ detail.provider}}</li>
+                        <li>peer_asn: {{ detail.peer_asn}}</li>
+                        <li>local_asn: {{ detail.local_asn}}</li>
+                        <li>ospf_area: {{ detail.ospf_area}}</li>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Device Name</th>
+                                <th>Serial</th>
+                                <th>Asset Tag</th>
+                                <th>Mac Address</th>
+                                <th>Firmware Version</th>
+                                <th>Hardware Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for device in site.device_set.all %}
+                                <td>{{ device.device_name }}</td>
+                                <td>{{ device.serial }}</td>
+                                <td>{{ device.asset_tag }}</td>
+                                <td>{{ device.mac_add }}</td>
+                                <td>{{ device.firm_ver }}</td>
+                                <td>{{ device.hard_type }}</td>
+                                <td>
+                                    <form action="#" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="song_id" value="{{ song.id }}" />
+                                        <button type="submit" class="btn btn-danger btn-xs">
+                                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Remove from site
+                                        </button>
+                                    </form>
+                                </td>
+                                <tr></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends 'Inventory/base.html' %}
+{% if success_message %}
+    <p><strong>{{ success_message }}</strong></p>
+{% endif %}
+<meta http-equiv="refresh" content="3;{% url 'Inventory:sites' %}">
