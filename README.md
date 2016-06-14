@@ -1,5 +1,8 @@
 # Network-Inventory
-django based Network site inventory 
+<br>
+Based off Tutorial by <a href="https://www.youtube.com/channel/UCJbPGzawDH1njbqV-D5HqKw" class="btn btn-primary btn-sn" role="button">thenewboston</a><br>
+here is a link to his github  https://github.com/buckyroberts
+
 
 Currently a work in progress.<br>
 In the long run this is going to be a central place to create new remote site., manage inventory at this sites.
