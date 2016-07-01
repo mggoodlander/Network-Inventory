@@ -1,4 +1,5 @@
 # Network-Inventory
+https://travis-ci.org/mggoodlander/Network-Inventory.svg?branch=master
 <br>
 Based off Tutorial by <a href="https://www.youtube.com/channel/UCJbPGzawDH1njbqV-D5HqKw" class="btn btn-primary btn-sn" role="button">thenewboston</a><br>
 here is a link to his github  https://github.com/buckyroberts
