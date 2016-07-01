@@ -12,3 +12,8 @@ body{
 
 .navbar-header {
 }
+.fixed-panel {
+  min-height: 10px;
+  max-height: 500px;  
+  overflow-y: scroll;
+}
