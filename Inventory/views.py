@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
-from django.views.generic.edit import UpdateView, DeleteView
-from .models import Site, Config, Device
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
+from .models import Site, Config, Device, Phone
 from .form import UserForm, SiteForm, ConfigForm, DeviceForm
+#TODO add comments for class and def funtions
+#TODO clean up Imports
 
 
 def index(request):
@@ -42,20 +44,14 @@ class SiteUpdate(UpdateView):
     fields = ['siteCode', 'city', 'state', 'address', 'zipcode']
 
 
-def create_detail(request, pk):
-    form = ConfigForm(request.POST or None)
-    sites = get_object_or_404(Site, pk=pk)
-    if form.is_valid():
-        site_details = sites.config_set.all()
-        details = form.save(commit=False)
-        details.sites = sites
-        details.save()
-        return render(request, 'Inventory/detail.html', {'sites': sites})
-    context = {
-        'sites': sites,
-        'form': form
-    }
-    return render(request, 'Inventory/config_form.html', context)
+class CreateDetail(CreateView):
+    model = Config
+    fields = [
+        'site', 'provider', 'circuit_id', 'svc_id', 'prefix', 'wan_net', 'wan_remote', 'wan_local', 'name_fw',
+        'fw_type', 'name_sw', 'sw_type', 'fw_lan', 'sw_lan', 'fw_lo', 'sw_lo', 'peer_asn', 'local_asn',
+        'ospf_area'
+    ]
+    success_url = '/netops/sites'
 
 
 def delete_detail(request, pk, detail_id):
@@ -77,7 +73,7 @@ class DetailUpdate(UpdateView):
         'fw_type', 'name_sw', 'sw_type', 'fw_lan', 'sw_lan', 'fw_lo', 'sw_lo', 'peer_asn', 'local_asn',
         'ospf_area'
     ]
-    success_url = '/Inventory/sites'
+    success_url = '/netops/sites'
 
 
 def closed(request, pk):
@@ -100,7 +96,8 @@ def site(request):
     if query:
         sites = sites.filter(
             Q(siteCode__contains=query) |
-            Q(city__contains=query)
+            Q(city__contains=query) |
+            Q(config__svc_id__icontains=query)
         ).distinct()
         return render(request, 'Inventory/sites.html', {'sites': sites,
                                                         'details': details})
@@ -113,10 +110,10 @@ def device(request):
     query = request.GET.get("q")
     if query:
         devices = devices.filter(
-            Q(device__address__contains=query) |
-            Q(mac_add__contains=query) |
-            Q(serial__contains=query) |
-            Q(hard_type=query)|
+            Q(device__address__icontains=query) |
+            Q(mac_add__icontains=query) |
+            Q(serial__icontains=query) |
+            Q(hard_type=query) |
             Q(asset_tag=query)
         ).distinct()
         return render(request, 'Inventory/devices.html', {'object_list': devices})
@@ -149,12 +146,71 @@ def create_device(request):
     return render(request, 'Inventory/device_form.html', context)
 
 
-class DeviceUpdate(UpdateView):
+class DeviceToSite(UpdateView):
     model = Device
-    fields = ['device']
-    success_url = '/Inventory/devices'
+    fields = ['device', 'device_name']
+    success_url = '/netops/devices'
 
 
 class DeviceDelete(DeleteView):
     model = Device
     success_url = reverse_lazy('Inventory:devices')
+
+
+def remove_device(request, device_id):
+    devices = Device.objects.get(pk=device_id)
+    t = devices.device.pk
+    if devices.device is not None:
+        devices.device = None
+        devices.save()
+        return detail(request, pk=t)
+
+
+class CreatePhone(CreateView):
+    model = Phone
+    fields = ['site', 'device_name', 'desc', 'device_pool', 'device_type', 'dir_num']
+    success_url = reverse_lazy('Inventory:phones')
+
+
+def phone(request):
+    phones = Phone.objects.filter()
+    query = request.GET.get("q")
+    if query:
+        phones = phones.filter(
+            Q(device_name__icontains=query) |
+            Q(desc__icontains=query) |
+            Q(device_pool__icontains=query) |
+            Q(device_type__icontains=query) |
+            Q(dir_num__icontains=query)
+        ).distinct()
+        return render(request, 'Inventory/phones.html', {'object_list': phones})
+    else:
+        phones = Phone.objects.all()
+        return render(request, 'Inventory/phones.html', {'object_list': phones})
+
+
+def remove_phone(request, phone_id):
+    phones = Phone.objects.get(pk=phone_id)
+    t = phones.site.pk
+    if phones.site is not None:
+        phones.site = None
+        phones.save()
+        return detail(request, pk=t)
+
+
+class PhoneToSite(UpdateView):
+    model = Phone
+    fields = ['site', 'device_name', 'device_pool']
+    success_url = '/netops/phones'
+
+
+class UpdatePhone(UpdateView):
+    model = Phone
+    fields = ['site', 'device_name', 'desc', 'device_pool', 'dir_num']
+    success_url = '/netops/phones'
+
+
+class DeletePhone(DeleteView):
+    model = Phone
+    success_url = reverse_lazy('Inventory:phones')
+
