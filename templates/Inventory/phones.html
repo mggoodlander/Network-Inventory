@@ -1,0 +1,71 @@
+{% extends 'Inventory/base.html' %}
+{% block Phone_active %}active{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid detail-container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Phones</h2>
+            <H3>Total:{{ object_list.count }}</H3>
+            <div class="panel panel-default">
+                <div class="panel-body fixed-panel">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Device Name</th>
+                                <th>Description</th>
+                                <th>Device Pool</th>
+                                <th>Device Type</th>
+                                <th>Directory Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for phone in object_list %}
+                                <td>
+                                    {% if phone.site == None %}
+                                    <form action="{% url 'Inventory:phonetosite' phone.id %}" method="get" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="phone_id" value="{{ phone.id }}" />
+                                        <button type="submit" class="btn btn-submit btn-xs">
+                                            <span class="glyphicon glyphicon-plus"></span>&nbsp; add to site
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                                <td>{{ phone.device_name }}</td>
+                                <td>{{ phone.desc }}</td>
+                                <td>{{ phone.device_pool }}</td>
+                                <td>{{ phone.device_type }}</td>
+                                <td>{{ phone.dir_num }}</td>
+                                <td>
+                                    <form action="{% url 'Inventory:update-phone' phone.id %}" method="get" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="phone_id" value="{{ phone.id}}" />
+                                            <button type="submit" class="btn btn-warning btn-xs">
+                                                <span class="glyphicon glyphicon-plus"></span>&nbsp; update phone
+                                            </button>
+                                        </form>
+                                </td>
+                                <td>
+                                    <form action="{% url 'Inventory:delete-phone' phone.id %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="phone_id" value="{{ phone.id }}" />
+                                        <button type="submit" class="btn btn-danger btn-xs">
+                                            <span class="glyphicon glyphicon-remove"></span>&nbsp; delete
+                                        </button>
+                                    </form>
+                                </td>
+                                </td>
+                                <tr></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

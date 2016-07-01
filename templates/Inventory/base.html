@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'inventory/style.css' %}"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
 
 
 </head>
@@ -39,6 +40,11 @@
                         <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp; Devices
                     </a>
                 </li>
+                <li class="{% block Phone_active %}{% endblock %}">
+                    <a href="{% url 'Inventory:phones' %}">
+                        <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>&nbsp; Phones
+                    </a>
+                </li>
             </ul>
 
             <form class="navbar-form navbar-left" role="search" method="get" action="#">
@@ -57,6 +63,11 @@
                 <li class="{% block DeviceAdd_active %}{% endblock %}">
                     <a href="{% url 'Inventory:devices_add' %}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Device
+                    </a>
+                </li>
+                <li class="{% block PhoneAdd_active %}{% endblock %}">
+                    <a href="{% url 'Inventory:phone_add' %}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Phone
                     </a>
                 </li>
                 <li class="">

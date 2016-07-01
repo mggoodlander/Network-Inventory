@@ -6,9 +6,11 @@
 <div class="container-fluid detail-container">
     <div class="row">
         <div class="col-sm-12">
-
+            <h1>Network Devices</h1>
+            <h3>Firewalls</h3>
             <div class="panel panel-default">
-                <div class="panel-body">
+                <div class="panel-body fixed-panel">
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -23,7 +25,9 @@
                         </thead>
                         <tbody>
                             {% for device in object_list %}
+                                {% if 'fw' in device.device_name %}
                                 <td>
+                                    {% if device.device == None %}
                                     <form action="{% url 'Inventory:device_update' device.id %}" method="get" style="display: inline;">
                                         {% csrf_token %}
                                         <input type="hidden" name="device_id" value="{{ device.id }}" />
@@ -31,6 +35,7 @@
                                             <span class="glyphicon glyphicon-plus"></span>&nbsp; add to site
                                         </button>
                                     </form>
+                                    {% endif %}
                                 </td>
                                 <td>{{ device.device_name }}</td>
                                 <td>{{ device.serial }}</td>
@@ -49,6 +54,60 @@
                                 </td>
                                 </td>
                                 <tr></tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3>Switches</h3>
+            <div class="panel panel-default">
+                <div class="panel-body fixed-panel">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Device Name</th>
+                                <th>Serial</th>
+                                <th>Asset Tag</th>
+                                <th>Mac Address</th>
+                                <th>Firmware Version</th>
+                                <th>Hardware Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for device in object_list %}
+                                {% if 'acc' in device.device_name %}
+                                <td>
+                                    {% if device.device == None %}
+                                    <form action="{% url 'Inventory:device_update' device.id %}" method="get" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="device_id" value="{{ device.id }}" />
+                                        <button type="submit" class="btn btn-submit btn-xs">
+                                            <span class="glyphicon glyphicon-plus"></span>&nbsp; add to site
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                                <td>{{ device.device_name }}</td>
+                                <td>{{ device.serial }}</td>
+                                <td>{{ device.asset_tag }}</td>
+                                <td>{{ device.mac_add }}</td>
+                                <td>{{ device.firm_ver }}</td>
+                                <td>{{ device.hard_type }}</td>
+                                <td>
+                                    <form action="{% url 'Inventory:device-delete' device.id %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="device_id" value="{{ device.id }}" />
+                                        <button type="submit" class="btn btn-danger btn-xs">
+                                            <span class="glyphicon glyphicon-remove"></span>&nbsp; delete
+                                        </button>
+                                    </form>
+                                </td>
+                                </td>
+                                <tr></tr>
+                                {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>

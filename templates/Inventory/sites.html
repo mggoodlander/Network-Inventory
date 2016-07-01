@@ -11,7 +11,7 @@
             <h3>Sites</h3>
         </div>
 
-
+        <div class="panel-body "style="max-height: 10px;min-height: 765px;overflow-y: scroll">
         {% if sites %}
             {% for site in sites %}
                 {% if site.is_closed == False %}
@@ -38,10 +38,12 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
+        </div>
 
         <div class="col-sm-12">
             <h3> Closed Sites</h3>
         </div>
+        <div class="panel-body "style="max-height: 10px;min-height: 180px;overflow-y: scroll">
         {% if sites %}
             {% for site in sites %}
                 {% if site.is_closed == True %}
@@ -67,6 +69,7 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
+        </div>
     </div>
 
 
