@@ -10,4 +10,6 @@ python:
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests
-script: python3 manage.py startserver
+script: 
+  - python manage.py migrate
+  - pthon manage.py runserver
