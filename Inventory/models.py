@@ -84,3 +84,18 @@ class Device(models.Model):
 
     def __str__(self):
         return self.device_name
+
+
+class Phone(models.Model):
+    d_tp = ((' ', ' '),
+            )
+
+    site = models.ForeignKey(Site, null=True, on_delete=models.SET_NULL, blank=True)
+    device_name = models.CharField(max_length=100, unique=True)
+    desc = models.CharField(max_length=200)
+    device_pool = models.CharField(max_length=200)
+    device_type = models.CharField(max_length=40, choices=d_tp, blank=True)
+    dir_num = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.desc
