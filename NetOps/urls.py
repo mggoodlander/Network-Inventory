@@ -18,5 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^Inventory/', include('Inventory.urls'))
+    url(r'^netops/', include('Inventory.urls'))
 ]
